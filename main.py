@@ -2,9 +2,8 @@ import os
 import tkinter as tk
 from tkinter import ttk
 import sv_ttk
-from tkinter import messagebox
 from common.get_steam_path import steam_path
-
+from common.show_messagebox import show_messagebox
 # 游戏路径常量定义
 STPLUG_PATH = steam_path / 'config' / 'stplug-in'
 GREENLUMA_PATH = steam_path / 'AppList'
@@ -153,12 +152,12 @@ def refresh_games():
 def on_delete():
     selected_item = tree.selection()
     if not selected_item:
-        messagebox.showwarning(LANGUAGE[current_lang]['warning'], LANGUAGE[current_lang]['no_selection'])
+        messagebox.showwarning(root, LANGUAGE[current_lang]['warning'], LANGUAGE[current_lang]['no_selection'], "warning")
         return
     appid = tree.item(selected_item[0], "values")[0]
     game_type = tree.item(selected_item[0], "values")[2]
     delete_game(appid, game_type)
-    messagebox.showinfo("Success", LANGUAGE[current_lang]['success'].format(appid))
+    show_messagebox(root, title="Success", message=LANGUAGE[current_lang]['success'].format(appid), type="info")
 
 def on_key_press(event):
     if event.keysym == 'Delete':
@@ -178,7 +177,6 @@ def prev_page():
         current_page -= 1
         display_games(current_page)
 
-<<<<<<< HEAD
 def switch_language():
     global current_lang
     current_lang = 'zh' if current_lang == 'en' else 'en'
@@ -195,12 +193,6 @@ def switch_language():
     tree.heading("AppID", text=LANGUAGE[current_lang]['appid'])
     tree.heading("Name", text=LANGUAGE[current_lang]['name'])
     tree.heading("Type", text=LANGUAGE[current_lang]['type'])
-=======
-# 界面设置
-root = tk.Tk()
-root.title("Unlocked Games Manager")
-root.geometry("800x600")
->>>>>>> 08da368b3d1dac3ffeb4d139fec74320fd44be38
 
     # 更新页面标签
     total_pages = (len(unlocked_games) + PAGE_SIZE - 1) // PAGE_SIZE  # 计算总页数
