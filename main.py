@@ -30,7 +30,7 @@ def load_unlocked_games():
     return games
 
 def display_games(page):
-    global page_label  # 添加这行
+    global page_label
     start_index = page * PAGE_SIZE
     end_index = start_index + PAGE_SIZE
     for row in tree.get_children():
