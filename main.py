@@ -30,13 +30,17 @@ def load_unlocked_games():
     return games
 
 def display_games(page):
+    global page_label  # 添加这行
     start_index = page * PAGE_SIZE
     end_index = start_index + PAGE_SIZE
     for row in tree.get_children():
         tree.delete(row)
-    
+
     for game in unlocked_games[start_index:end_index]:
         tree.insert("", "end", values=(game["appid"], game["name"], game["type"]))
+    
+    # 更新页码标签
+    page_label.config(text=f"Page: {current_page + 1}")
 
 def filter_games():
     global current_page
@@ -127,6 +131,10 @@ prev_button.pack(side=tk.LEFT, padx=10)
 
 next_button = ttk.Button(root, text="Next Page", command=next_page)
 next_button.pack(side=tk.RIGHT, padx=10)
+
+# 添加标签来指示当前页码
+page_label = ttk.Label(root, text=f"Page: {current_page + 1}")
+page_label.pack(pady=10)
 
 root.bind('<Delete>', on_key_press)
 root.bind('<F5>', on_key_press)
