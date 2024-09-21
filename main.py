@@ -5,49 +5,70 @@ import sv_ttk
 from common.get_steam_path import steam_path
 from common.show_messagebox import show_messagebox
 
-def load_unlocked_games():
-    games = []
+# 游戏路径常量定义
+STPLUG_PATH = steam_path / 'config' / 'stplug-in'
+GREENLUMA_PATH = steam_path / 'AppList'
 
-    if os.path.exists(stplug_path):
-        for filename in os.listdir(stplug_path):
-            if filename.endswith('.st'):
-                appid = filename.replace('.st', '')
-                games.append({"appid": appid, "name": f"Game {appid}", "type": "SteamTools"})
+# 分页相关常量
+PAGE_SIZE = 10
+current_page = 0
+
+def load_games_from_directory(directory, extension, game_type):
+    games = []
+    if os.path.exists(directory):
+        for filename in os.listdir(directory):
+            if filename.endswith(extension):
+                appid = filename.replace(extension, '')
+                games.append({"appid": appid, "name": f"Game {appid}", "type": game_type})
     else:
-        print(f"Path not found: {stplug_path}")
-    
-    if os.path.exists(greenluma_path):
-        for filename in os.listdir(greenluma_path):
-            if filename.endswith('.txt'):
-                appid = filename.replace('.txt', '')
-                games.append({"appid": appid, "name": f"Game {appid}", "type": "GreenLuma"})
-    else:
-        print(f"Path not found: {greenluma_path}")
-    
+        print(f"Path not found: {directory}")
     return games
 
-def filter_games():
-    search_term = search_var.get().lower()
+def load_unlocked_games():
+    games = load_games_from_directory(STPLUG_PATH, '.st', 'SteamTools')
+    games += load_games_from_directory(GREENLUMA_PATH, '.txt', 'GreenLuma')
+    return games
+
+def display_games(page):
+    start_index = page * PAGE_SIZE
+    end_index = start_index + PAGE_SIZE
     for row in tree.get_children():
         tree.delete(row)
-    for game in unlocked_games:
-        if search_term in game["appid"].lower() or search_term in game["name"].lower() or search_term in game["type"].lower():
-            tree.insert("", "end", values=(game["appid"], game["name"], game["type"]))
+    
+    for game in unlocked_games[start_index:end_index]:
+        tree.insert("", "end", values=(game["appid"], game["name"], game["type"]))
+
+def filter_games():
+    global current_page
+    search_term = search_var.get().lower()
+    filtered_games = [game for game in unlocked_games if any(search_term in game[field].lower() for field in ["appid", "name", "type"])]
+    display_filtered_games(filtered_games)
+
+def display_filtered_games(filtered_games):
+    global current_page
+    if filtered_games:
+        current_page = 0
+        global unlocked_games
+        unlocked_games = filtered_games
+        display_games(current_page)
+    else:
+        for row in tree.get_children():
+            tree.delete(row)
 
 def delete_game(appid, game_type):
-    if game_type == "SteamTools":
-        file_path = os.path.join(stplug_path, f"{appid}.st")
-    elif game_type == "GreenLuma":
-        file_path = os.path.join(greenluma_path, f"{appid}.txt")
+    file_path = os.path.join(STPLUG_PATH if game_type == "SteamTools" else GREENLUMA_PATH, f"{appid}{'.st' if game_type == 'SteamTools' else '.txt'}")
     
-    if os.path.exists(file_path):
-        os.remove(file_path)
+    try:
+        if os.path.exists(file_path):
+            os.remove(file_path)
+    except Exception as e:
+        print(f"Error deleting file {file_path}: {e}")
     refresh_games()
 
 def refresh_games():
     global unlocked_games
     unlocked_games = load_unlocked_games()
-    filter_games()
+    display_games(current_page)
 
 def on_delete():
     selected_item = tree.selection()
@@ -57,7 +78,7 @@ def on_delete():
     appid = tree.item(selected_item[0], "values")[0]
     game_type = tree.item(selected_item[0], "values")[2]
     delete_game(appid, game_type)
-    show_messagebox(root, title="Success", message=f"Game: {appid}, Delete Success.", type="warning")
+    show_messagebox(root, title="Success", message=f"Game: {appid}, Delete Success.", type="info")
 
 def on_key_press(event):
     if event.keysym == 'Delete':
@@ -65,6 +86,19 @@ def on_key_press(event):
     elif event.keysym == 'F5':
         refresh_games()
 
+def next_page():
+    global current_page
+    if (current_page + 1) * PAGE_SIZE < len(unlocked_games):
+        current_page += 1
+        display_games(current_page)
+
+def prev_page():
+    global current_page
+    if current_page > 0:
+        current_page -= 1
+        display_games(current_page)
+
+# 界面设置
 root = tk.Tk()
 root.title("Unlocked Games Manager")
 root.geometry("600x400")
@@ -88,17 +122,20 @@ tree.pack(expand=True, fill="both")
 delete_button = ttk.Button(root, text="Delete (Delete)", command=on_delete)
 delete_button.pack(pady=10)
 
+prev_button = ttk.Button(root, text="Previous Page", command=prev_page)
+prev_button.pack(side=tk.LEFT, padx=10)
+
+next_button = ttk.Button(root, text="Next Page", command=next_page)
+next_button.pack(side=tk.RIGHT, padx=10)
+
 root.bind('<Delete>', on_key_press)
 root.bind('<F5>', on_key_press)
 
-stplug_path = steam_path / 'config' / 'stplug-in'
-greenluma_path = steam_path / 'AppList' 
-
-if not os.path.exists(stplug_path) and not os.path.exists(greenluma_path):
+if not (os.path.exists(STPLUG_PATH) or os.path.exists(GREENLUMA_PATH)):
     show_messagebox(root, "Error", "Both SteamTools and GreenLuma paths do not exist.", "error")
     root.destroy()
 else:
     unlocked_games = load_unlocked_games()
-    filter_games()
+    display_games(current_page)
 
 root.mainloop()
