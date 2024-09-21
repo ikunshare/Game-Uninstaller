@@ -42,7 +42,7 @@ LANGUAGE = {
         'error': "错误",
         'paths_not_exist': "SteamTools 和 GreenLuma 路径都不存在。",
         'language_switch': "切换语言",
-        'appid': "应用ID",
+        'appid': "AppID",
         'name': "名称",
         'type': "类型"
     }
