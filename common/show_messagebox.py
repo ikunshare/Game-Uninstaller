@@ -10,17 +10,23 @@ def show_messagebox(parent, title, message, type="info"):
     :param type: 消息框类型（info, warning, error, yesno）
     :return: None 或 bool（仅在 yesno 类型时返回）
     """
+    # 创建一个新的顶层窗口并隐藏
     messagebox_window = tk.Toplevel(parent)
-    messagebox_window.withdraw()  # 隐藏主窗口
+    messagebox_window.withdraw()  
     messagebox_window.attributes("-topmost", True)  # 确保置顶
 
-    if type == "info":
-        messagebox.showinfo(title, message, parent=messagebox_window)
-    elif type == "warning":
-        messagebox.showwarning(title, message, parent=messagebox_window)
-    elif type == "error":
-        messagebox.showerror(title, message, parent=messagebox_window)
-    elif type == "yesno":
-        return messagebox.askyesno(title, message, parent=messagebox_window)
+    # 根据消息框类型显示相应的消息框
+    messagebox_func = {
+        "info": messagebox.showinfo,
+        "warning": messagebox.showwarning,
+        "error": messagebox.showerror,
+        "yesno": messagebox.askyesno,
+    }.get(type)
+
+    if messagebox_func:
+        result = messagebox_func(title, message, parent=messagebox_window)
+        # 如果是 yesno 类型，返回结果
+        if type == "yesno":
+            return result
 
     messagebox_window.destroy()
