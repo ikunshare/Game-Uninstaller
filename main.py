@@ -105,7 +105,7 @@ def prev_page():
 # 界面设置
 root = tk.Tk()
 root.title("Unlocked Games Manager")
-root.geometry("600x400")
+root.geometry("1024x768")
 
 sv_ttk.use_light_theme()
 
