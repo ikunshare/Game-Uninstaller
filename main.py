@@ -9,7 +9,7 @@ STPLUG_PATH = steam_path / 'config' / 'stplug-in'
 GREENLUMA_PATH = steam_path / 'AppList'
 
 # 固定每页显示的游戏数量
-PAGE_SIZE = 15  # 设置为固定值
+PAGE_SIZE = 14  # 设置为固定值
 current_page = 0
 
 # 语言变量
