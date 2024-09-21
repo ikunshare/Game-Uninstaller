@@ -1,0 +1,19 @@
+{
+  "name": "game-uninstaller",
+  "version": "1.0.0",
+  "description": "删除SteamTools或GreenLuma解锁的游戏",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ikunshare/Game-Uninstaller.git"
+  },
+  "author": "ikun0014",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ikunshare/Game-Uninstaller/issues"
+  },
+  "homepage": "https://github.com/ikunshare/Game-Uninstaller#readme"
+}
