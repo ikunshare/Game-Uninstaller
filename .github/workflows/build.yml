@@ -37,6 +37,7 @@ jobs:
         script-name: main.py
         standalone: true
         onefile: true
+        disable-console: true
         show-memory: true
         windows-uac-admin: true
         windows-icon-from-ico: icon.jpg
