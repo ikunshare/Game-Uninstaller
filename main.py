@@ -152,7 +152,7 @@ def refresh_games():
 def on_delete():
     selected_item = tree.selection()
     if not selected_item:
-        messagebox.showwarning(root, LANGUAGE[current_lang]['warning'], LANGUAGE[current_lang]['no_selection'], "warning")
+        show_messagebox(root, LANGUAGE[current_lang]['warning'], LANGUAGE[current_lang]['no_selection'], "warning")
         return
     appid = tree.item(selected_item[0], "values")[0]
     game_type = tree.item(selected_item[0], "values")[2]
@@ -199,7 +199,7 @@ def switch_language():
     page_label.config(text=f"{current_page + 1}/{total_pages}")
 
 if not (os.path.exists(STPLUG_PATH) or os.path.exists(GREENLUMA_PATH)):
-    messagebox.showerror(LANGUAGE[current_lang]['error'], LANGUAGE[current_lang]['paths_not_exist'])
+    show_messagebox(root, LANGUAGE[current_lang]['error'], LANGUAGE[current_lang]['paths_not_exist'], "error")
     root.destroy()
 else:
     unlocked_games = load_unlocked_games()
@@ -208,5 +208,5 @@ else:
 root.bind('<Delete>', on_key_press)
 root.bind('<F5>', on_key_press)
 
-sv_ttk.set_theme("dark")
+sv_ttk.set_theme("light")
 root.mainloop()
