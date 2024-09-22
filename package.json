@@ -1,6 +1,6 @@
 {
   "name": "game-uninstaller",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "删除SteamTools或GreenLuma解锁的游戏",
   "main": "index.js",
   "scripts": {
