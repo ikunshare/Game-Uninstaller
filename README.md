@@ -10,11 +10,11 @@
 </div>
 
 
-## Onekey
- Steam Depot Manifest Uninstaller
+## Game Uninstaller
+删除SteamTools和GreenLuma所解锁的游戏
 
 ## 使用方法
- 先去Release下最新发布，打开使用即可
+先去Release下最新发布，打开使用即可
 
 ## 开发
 本程序使用Python编程语言开发   
@@ -37,18 +37,17 @@ pip install -r requirements.txt
 
 ## Star 趋势图
 
- [![Stargazers over time](https://starchart.cc/ikunshare/Game-Uninstaller.svg)](https://starchart.cc/ikunshare/Game-Uninstaller)
+[![Stargazers over time](https://starchart.cc/ikunshare/Game-Uninstaller.svg)](https://starchart.cc/ikunshare/Game-Uninstaller)
 
 ## 贡献者
 
- <a href="https://github.com/ikunshare/Game-Uninstaller/graphs/contributors">
-   <img src="https://contrib.rocks/image?repo=ikunshare/Game-Uninstaller" />
- </a>
+<a href="https://github.com/ikunshare/Game-Uninstaller/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=ikunshare/Game-Uninstaller" />
+</a>
 
 
 ## 社区和支持
 加入我们的社区，参与讨论和支持：
 - [GitHub Discussions](https://github.com/ikunshare/Game-Uninstaller/discussions)
-- [Gitter Chat](https://gitter.im/ikunshare/Game-Uninstaller)
 - [QQ](https://qm.qq.com/q/d7sWovfAGI)
 - [Telegram](https://t.me/ikunshare_group)
